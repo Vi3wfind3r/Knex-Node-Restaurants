@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 
 const DATABASE = {
   client: 'pg',
-  // connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
-  connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
+  connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
+  // connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
   // debug: true
 };
 
@@ -198,6 +198,37 @@ app.use(bodyParser.json());
 //     .limit(10)
 //     .then(results => res.json(results));
 // });
+
+
+//Hydrate Get//
+app.get('/restaurants', (req, res) => {
+  knex.select('restaurants.id', 'name', 'cuisine', 'borough', 'grades.id as gradeId', 'grade', 'score')
+    .from('restaurants')
+    .innerJoin('grades', 'restaurants.id', 'grades.restaurant_id')
+    .orderBy('date', 'desc')
+    .limit(10)
+    .then(results => res.json(hydrate(results)));
+});
+
+
+//Manual Hydrate//
+function hydrate(arr) {
+  const myObj = {};
+  arr.forEach(el => {
+    if(!myObj[el.id]) {
+      myObj[el.id] = {
+        id: el.id, 
+        name: el.name, 
+        age: el.age, 
+        pets: []
+      };
+    }
+    myObj[el.id].pets.push({name: el.petName, type: el.petType});
+  });
+  return myObj;
+}
+
+
 
 app.listen(PORT);
 
