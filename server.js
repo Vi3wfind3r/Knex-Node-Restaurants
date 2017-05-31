@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 
 const DATABASE = {
   client: 'pg',
-  // connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
-  connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
+  connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
+  // connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
   // debug: true
 };
 
@@ -177,6 +177,18 @@ app.use(bodyParser.json());
 //     .then((results) => console.log("Success"));
 // });
 
+
+//Inner Join//
+app.get('/restaurants', (req, res) => {
+
+  knex.select('restaurants.id', 'name', 'cuisine', 'borough', 'grades.id', 'grade', 'date as inspectionDate', 'score')
+    .from('restaurants')
+    .where('restaurants.id', '1')
+    .innerJoin('grades', 'grades.restaurant_id', 'restaurants.id')
+    .orderBy('date', 'desc')
+    .limit(1)
+    .then(results => res.json(results));
+});
 
 app.listen(PORT);
 
