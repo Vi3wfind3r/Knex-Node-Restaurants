@@ -3,7 +3,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { DATABASE, PORT } = require('./config');
+const DATABASE = {
+  client: 'pg',
+  // connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
+  connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
+  // debug: true
+};
+
+const PORT = process.env.PORT || 8080; 
 
 const knex = require('knex')(DATABASE);
 
@@ -146,18 +153,29 @@ app.use(bodyParser.json());
 // });
 
 // Update a record//
-app.put('/restaurants', (req, res) => {
-  knex('restaurants')
-    .where('nyc_restaurant_id', '=', '3019184')
-    .update('name', 'Jamie and Kyle Pub and Restaurant')
-    .returning(['nyc_restaurant_id', 'name'])
-    .then((results) => res.json(results));
-});
+// app.put('/restaurants', (req, res) => {
+//   knex('restaurants')
+//     .where('nyc_restaurant_id', '=', req.body.nyc_restaurant_id)
+//     .update('name', req.body.name)
+//     .returning(['nyc_restaurant_id', 'name', 'borough'])
+//     .then((results) => res.json(results));
+// });
 
 //Delete by id//
+// app.delete('/grades', (req, res) => {
+//   knex('grades')
+//     .where('id', req.body.id)
+//     .del()
+//     .then((results) => console.log("Success"));
+// });
 
 //A blocked delete//
-
+// app.delete('/restaurants', (req, res) => {
+//   knex('restaurants')
+//     .where('id', req.body.id)
+//     .del()
+//     .then((results) => console.log("Success"));
+// });
 
 
 app.listen(PORT);
