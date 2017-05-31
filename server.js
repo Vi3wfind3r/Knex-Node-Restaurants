@@ -3,10 +3,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const Treeize   = require('treeize');
+const restaurants    = new Treeize();
+
 const DATABASE = {
   client: 'pg',
-  connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
-  // connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
+  // connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
+  connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
   // debug: true
 };
 
@@ -17,13 +20,24 @@ const knex = require('knex')(DATABASE);
 const app = express();
 app.use(bodyParser.json());
 
-//Get all restaurants//
+// Get all restaurants//
 // app.get('/restaurants', (req, res) => {
 
 //   knex.select()
 //     .from('restaurants')
+//     .limit(10)
 //     .then(results => res.json(results));
 // });
+
+app.get('/grades', (req, res) => {
+
+  knex.select()
+    .from('grades')
+    .limit(10)
+    .then(results => res.json(results));
+});
+
+
 
 //Get Italian Restaurants//
 // app.get('/restaurants', (req, res) => {
@@ -201,32 +215,68 @@ app.use(bodyParser.json());
 
 
 //Hydrate Get//
-app.get('/restaurants', (req, res) => {
-  knex.select('restaurants.id', 'name', 'cuisine', 'borough', 'grades.id as gradeId', 'grade', 'score')
-    .from('restaurants')
-    .innerJoin('grades', 'restaurants.id', 'grades.restaurant_id')
-    .orderBy('date', 'desc')
-    .limit(10)
-    .then(results => res.json(hydrate(results)));
-});
+// app.get('/restaurants', (req, res) => {
+//   knex.select('restaurants.id', 'name', 'cuisine', 'borough', 'grades.id as gradeId', 'grade', 'score')
+//     .from('restaurants')
+//     .innerJoin('grades', 'restaurants.id', 'grades.restaurant_id')
+//     .orderBy('date', 'desc')
+//     .limit(10)
+//     .then(results => res.json(hydrate(results)));
+// });
 
 
 //Manual Hydrate//
-function hydrate(arr) {
-  const myObj = {};
-  arr.forEach(el => {
-    if(!myObj[el.id]) {
-      myObj[el.id] = {
-        id: el.id, 
-        name: el.name, 
-        age: el.age, 
-        pets: []
-      };
-    }
-    myObj[el.id].pets.push({name: el.petName, type: el.petType});
-  });
-  return myObj;
-}
+// function hydrate(arr) {
+//   const myObj = {};
+//   arr.forEach(el => {
+//     if(!myObj[el.id]) {
+//       myObj[el.id] = {
+//         name: el.name, 
+//         cuisine: el.cuisine, 
+//         borough: el.borough, 
+//         grades: []
+//       };
+//     }
+//     myObj[el.id].grades.push({gradeId: el.gradeId, grade: el.grade, score: el.score});
+//   });
+//   return myObj;
+// }
+
+app.post('/restaurants', (req, res) => {
+  knex.insert({
+    name: req.body.name,
+    cuisine: req.body.cuisine,
+    borough: req.body.borough
+  })
+  .into('restaurants')
+  .insert(
+    [
+       {
+           "grade": "C",
+           "score": 42
+       },
+       {
+           "grade": "B",
+           "score": 72
+       },
+       {
+           "grade": "D",
+           "score": 35
+       },
+       {
+           "grade": "A",
+           "score": 95
+       }
+    ])
+    .into('grades')
+    .innerJoin('grades', 'restaurants.id', 'grades.restaurant_id')
+    .then(results => console.log("Success"));
+    
+    knex.select('name')
+      .from('restaurants')
+      .where('name', req.body.name)
+      .then(results => res.json(results));
+});
 
 
 
