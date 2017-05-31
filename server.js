@@ -3,17 +3,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const Treeize   = require('treeize');
-const restaurants    = new Treeize();
+// const Treeize   = require('treeize');
+// const restaurants    = new Treeize();
 
 const DATABASE = {
   client: 'pg',
-  // connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
-  connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
+  connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
+  // connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
   // debug: true
 };
 
-const PORT = process.env.PORT || 8080; 
+const PORT = process.env.PORT || 8080;
 
 const knex = require('knex')(DATABASE);
 
@@ -248,34 +248,38 @@ app.post('/restaurants', (req, res) => {
     cuisine: req.body.cuisine,
     borough: req.body.borough
   })
-  .into('restaurants')
-  .insert(
+    .into('restaurants')
+    .insert(
     [
-       {
-           "grade": "C",
-           "score": 42
-       },
-       {
-           "grade": "B",
-           "score": 72
-       },
-       {
-           "grade": "D",
-           "score": 35
-       },
-       {
-           "grade": "A",
-           "score": 95
-       }
+      {
+        'grade': 'C',
+        'score': 42,
+        "date": "2014-09-06T00:00:00.000Z"
+      },
+      {
+        'grade': 'B',
+        'score': 72,
+        "date": "2014-09-06T00:00:00.000Z"
+      },
+      {
+        'grade': 'D',
+        'score': 35,
+        "date": "2014-09-06T00:00:00.000Z"
+      },
+      {
+        'grade': 'A',
+        'score': 95,
+        "date": "2014-09-06T00:00:00.000Z"
+      }
     ])
     .into('grades')
     .innerJoin('grades', 'restaurants.id', 'grades.restaurant_id')
-    .then(results => console.log("Success"));
-    
-    knex.select('name')
-      .from('restaurants')
-      .where('name', req.body.name)
-      .then(results => res.json(results));
+    .then(results => console.log('Success'));
+
+  knex.select('name')
+    .from('restaurants')
+    .where('name', 'Terra Byte Cafe')
+    .then(results => res.json(results));
 });
 
 
