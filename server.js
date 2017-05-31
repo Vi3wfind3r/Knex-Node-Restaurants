@@ -3,7 +3,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { DATABASE, PORT } = require('./config');
+const DATABASE = {
+  client: 'pg',
+  // connection: 'postgresql://dev:dev@localhost/dev-restaurants-app',
+  connection: 'postgresql://ubuntu:123@localhost/dev-restaurants-app',
+  // debug: true
+};
+
+const PORT = process.env.PORT || 8080; 
 
 const knex = require('knex')(DATABASE);
 
