@@ -119,53 +119,63 @@ app.use(bodyParser.json());
 // });
 
 // Create three restaurants and return id and name//
-app.post('/restaurants', (req, res) => {
-  knex
-    .insert([
-      {
-        name: req.body[0].name,
-        borough: req.body[0].borough,
-        cuisine: req.body[0].cuisine,
-        address_building_number: req.body[0].address_building_number,
-        address_street: req.body[0].address_street,
-        address_zipcode: req.body[0].address_zipcode
-      },
-      {
-        name: req.body[1].name,
-        borough: req.body[1].borough,
-        cuisine: req.body[1].cuisine,
-        address_building_number: req.body[1].address_building_number,
-        address_street: req.body[1].address_street,
-        address_zipcode: req.body[1].address_zipcode
-      },
-      {
-        name: req.body[2].name,
-        borough: req.body[2].borough,
-        cuisine: req.body[2].cuisine,
-        address_building_number: req.body[2].address_building_number,
-        address_street: req.body[2].address_street,
-        address_zipcode: req.body[2].address_zipcode
-      }
-    ])
-    .into('restaurants')
-    .returning(['id', 'name'])
-    .then((results) => res.json(results));
-});
-
-//Update a record//
-// app.put('/restaurants', (req, res) => {
-//   knex('restaurants')
-//     .where('nyc_restaurant_id', '=', '3019184')
-//     .update('name', 'Jamie and Kyle Pub and Restaurant')
-//     .returning(['nyc_restaurant_id', 'name'])
+// app.post('/restaurants', (req, res) => {
+//   knex
+//     .insert([
+//       {
+//         name: req.body[0].name,
+//         borough: req.body[0].borough,
+//         cuisine: req.body[0].cuisine,
+//         address_building_number: req.body[0].address_building_number,
+//         address_street: req.body[0].address_street,
+//         address_zipcode: req.body[0].address_zipcode
+//       },
+//       {
+//         name: req.body[1].name,
+//         borough: req.body[1].borough,
+//         cuisine: req.body[1].cuisine,
+//         address_building_number: req.body[1].address_building_number,
+//         address_street: req.body[1].address_street,
+//         address_zipcode: req.body[1].address_zipcode
+//       },
+//       {
+//         name: req.body[2].name,
+//         borough: req.body[2].borough,
+//         cuisine: req.body[2].cuisine,
+//         address_building_number: req.body[2].address_building_number,
+//         address_street: req.body[2].address_street,
+//         address_zipcode: req.body[2].address_zipcode
+//       }
+//     ])
+//     .into('restaurants')
+//     .returning(['id', 'name'])
 //     .then((results) => res.json(results));
 // });
 
+// Update a record//
+// app.put('/restaurants', (req, res) => {
+//   knex('restaurants')
+//     .where('nyc_restaurant_id', '=', req.body.nyc_restaurant_id)
+//     .update('name', req.body.name)
+//     .returning(['nyc_restaurant_id', 'name', 'borough'])
+//     .then((results) => res.json(results));
+// });
 
 //Delete by id//
+// app.delete('/grades', (req, res) => {
+//   knex('grades')
+//     .where('id', req.body.id)
+//     .del()
+//     .then((results) => console.log("Success"));
+// });
 
 //A blocked delete//
-
+// app.delete('/restaurants', (req, res) => {
+//   knex('restaurants')
+//     .where('id', req.body.id)
+//     .del()
+//     .then((results) => console.log("Success"));
+// });
 
 
 app.listen(PORT);
