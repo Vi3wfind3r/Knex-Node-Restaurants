@@ -1,0 +1,28 @@
+{
+  "name": "node-restaurants-knex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "mocha",
+    "devmon": "nodemon drills.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "knex": "^0.12.9",
+    "morgan": "^1.7.0",
+    "pg": "^6.2.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "faker": "^3.1.0",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0"
+  }
+}
